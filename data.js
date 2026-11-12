@@ -7,6 +7,7 @@ export const profile = {
  availability: 'Stage en Data Science, IA ou optimisation — 4 à 6 mois — à partir du 10 mai 2027.',
  email: 'bilalremini380@gmail.com',
 linkedin: 'https://www.linkedin.com/in/billal-remini-b95057399/',
+ N°: '+33 776136043',
 cv: `${import.meta.env.BASE_URL}CV_Billal_REMINI.pdf`,
  about: 'Mon parcours en mathématiques appliquées m’a conduit à me spécialiser en modélisation, optimisation et aide à la décision. Aujourd’hui, ma formation à HETIC Paris prolonge ce socle vers la Data Science et l’intelligence artificielle.',
  interest: 'L’optimisation est au cœur de mes intérêts : modéliser des problèmes concrets et rechercher des solutions adaptées aux contraintes opérationnelles.',
