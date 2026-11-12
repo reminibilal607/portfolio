@@ -1,28 +1,648 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowUpRight, Download, Linkedin, Mail, Menu, X, Code2, Database, BrainCircuit, Boxes, Send } from 'lucide-react';
-import { profile, skills, experience, projects, formations, languages } from './data';
+import {
+  ArrowUpRight,
+  Download,
+  Linkedin,
+  Mail,
+  Phone,
+  Menu,
+  X,
+  Code2,
+  Database,
+  BrainCircuit,
+  Boxes,
+  Send,
+} from 'lucide-react';
+
+import {
+  profile,
+  skills,
+  experience,
+  projects,
+  formations,
+  languages,
+} from './data';
+
 import './style.css';
-const navigation = [['À propos','a-propos'],['Compétences','competences'],['Expérience','experience'],['Projet','projets'],['Formation','formation']];
-const icons = { code: Code2, brain: BrainCircuit, data: Database, tools: Boxes };
-function Tags({items}) { return <div className="tags">{items.map(t=><span key={t}>{t}</span>)}</div>; }
-function DataArt(){
- const [phase,setPhase]=useState(0);
- return <div className="hero-art"><div className="art-heading"><span><span className="live-dot"/> MODÉLISER · EXPLORER · OPTIMISER</span><span>FIG. 001</span></div><div className="point-cloud"><svg viewBox="0 0 500 410" role="img" aria-label="Nuage de points abstrait illustratif, sans données de performance"><defs><radialGradient id="glow"><stop stopColor="#6c56ff" stopOpacity=".15"/><stop offset="1" stopColor="#6c56ff" stopOpacity="0"/></radialGradient></defs><ellipse cx="250" cy="210" rx="240" ry="190" fill="url(#glow)"/>{[0,1,2,3,4].map(n=><path key={n} d={`M45 ${310-n*33} L240 ${390-n*33} L455 ${270-n*33}`} className="gridline"/>)}{Array.from({length:330},(_,i)=>{const t=i*2.39996,r=Math.sqrt(i/330),x=250+Math.cos(t)*r*180,y=208+Math.sin(t)*r*108+Math.sin(x/50+phase)*40;return <circle key={i} cx={x} cy={y} r={i%13===0?3:1.7} fill={i%3===0?'#a589ff':'#5188ff'} opacity={.35+(i%7)/12} style={{animationDelay:`${i%20*-.2}s`}}/>;})}</svg><span className="floating-tag">〈 contraintes → possibilités 〉</span></div><div className="art-footer"><span>VISUALISATION ILLUSTRATIVE · {phase+1}/3</span><button onClick={()=>setPhase((phase+1)%3)} aria-label="Changer la visualisation">↻</button></div></div>;
+
+// Utilise les coordonnées du fichier data.js si elles sont renseignées.
+const phone = profile.phone || '+33 7 76 13 60 43';
+const phoneLink = profile.phoneLink || 'tel:+33776136043';
+
+const navigation = [
+  ['À propos', 'a-propos'],
+  ['Compétences', 'competences'],
+  ['Expérience', 'experience'],
+  ['Projet', 'projets'],
+  ['Formation', 'formation'],
+];
+
+const icons = {
+  code: Code2,
+  brain: BrainCircuit,
+  data: Database,
+  tools: Boxes,
+};
+
+function Tags({ items }) {
+  return (
+    <div className="tags">
+      {items.map((tag) => (
+        <span key={tag}>{tag}</span>
+      ))}
+    </div>
+  );
 }
-function App(){
- const [menu,setMenu]=useState(false);
- // mailto prépare un brouillon dans la messagerie ; aucun envoi n’est effectué par le site.
- function contact(e){e.preventDefault();const d=new FormData(e.currentTarget);window.location.href=`mailto:${profile.email}?subject=${encodeURIComponent(d.get('subject'))}&body=${encodeURIComponent(`${d.get('name')} (${d.get('email')})\n\n${d.get('message')}`)}`;}
- return <><a className="skip" href="#main">Aller au contenu</a><header><a className="logo" href="#accueil" aria-label={`Accueil de ${profile.name}`}><span className="logo-mark">{profile.initials}<span>•</span></span><span className="logo-label">MODÉLISATION & DATA</span></a><nav className={menu?'open':''} aria-label="Navigation principale">{navigation.map(([label,id])=><a key={id} href={`#${id}`} onClick={()=>setMenu(false)}>{label}</a>)}<a className="nav-contact" href="#contact" onClick={()=>setMenu(false)}>Contact <ArrowUpRight size={15}/></a></nav><button className="menu-button" onClick={()=>setMenu(!menu)} aria-expanded={menu} aria-label={menu?'Fermer le menu':'Ouvrir le menu'}>{menu?<X/>:<Menu/>}</button></header>
- <main id="main"><section className="hero wrap personal-hero" id="accueil"><div className="hero-copy"><div className="eyebrow"><span/> PORTFOLIO PERSONNEL</div><p className="hello">Bonjour, je suis</p><h1>{profile.name.split(' ')[0]}<br/><span>{profile.name.split(' ').slice(1).join(' ')}.</span></h1><p className="professional-title">{profile.title}</p><p className="student-title">{profile.education}</p><p className="intro">{profile.introduction}</p><div className="availability"><span className="live-dot"/><p>{profile.availability}</p></div><div className="hero-actions"><a className="button primary" href="#projets">Découvrir mon projet <ArrowUpRight size={16}/></a><a className="button secondary" href={profile.cv} download="CV_Billal_REMINI.pdf">Télécharger mon CV <Download size={16}/></a><a className="text-action" href="#contact">Me contacter ↗</a></div></div><DataArt/><div className="hero-bottom"><a href="#a-propos">DÉFILER POUR DÉCOUVRIR <span>↓</span></a><span>Comprendre les contraintes. Explorer les solutions.</span></div></section>
- <div className="tech-strip"><div className="wrap"><span>LES MATHÉMATIQUES COMME SOCLE. <b>LES DONNÉES COMME TERRAIN.</b></span><span>Python <i>✳</i> Optimisation <i>✳</i> Aide à la décision</span></div></div>
- <section className="wrap section about" id="a-propos"><div><p className="eyebrow">01 — À PROPOS</p><h2>Modéliser le réel.<br/><span>Explorer les possibles.</span></h2></div><div className="about-text"><p className="large-text">Des mathématiques appliquées<br/>aux décisions concrètes.</p><p>{profile.about}</p><p>{profile.interest}</p><p className="exploration-label">Domaines que je souhaite explorer</p><Tags items={profile.exploration}/></div></section>
- <section className="wrap section" id="competences"><div className="section-heading"><div><p className="eyebrow">02 — COMPÉTENCES</p><h2>Un socle analytique.<br/><span>Une ouverture vers la data.</span></h2></div><p>Compétences et apprentissages,<br/>sans niveaux arbitraires.</p></div><div className="skill-grid personalized-skills">{skills.map((s,i)=>{const Icon=icons[s.icon];return <article className={`skill ${s.learning?'learning':''}`} key={s.title}><div className="skill-top"><Icon size={25}/><span>{String(i+1).padStart(2,'0')}</span></div><h3>{s.title}</h3>{s.learning&&<p>Apprentissages actuels à HETIC</p>}<Tags items={s.tags}/></article>;})}</div></section>
- <section className="experience-section" id="experience"><div className="wrap section experience-grid"><div><p className="eyebrow">03 — EXPÉRIENCE PROFESSIONNELLE</p><h2>L’optimisation,<br/><span>sur le terrain.</span></h2><p className="experience-date">{experience.dates}</p></div><article className="experience-card"><p className="project-category">{experience.company}</p><h3>{experience.role}</h3><ul>{experience.missions.map(m=><li key={m}>{m}</li>)}</ul><p className="result-note">{experience.result}</p><a className="text-action" href="#projets">Explorer le mémoire associé <ArrowUpRight size={16}/></a></article></div></section>
- <section className="projects-section" id="projets"><div className="wrap section"><div className="section-heading"><div><p className="eyebrow">04 — PROJET ACADÉMIQUE</p><h2>Des contraintes.<br/><span>Une recherche de solutions.</span></h2></div></div>{projects.map(p=><article className="case-study" key={p.title}><div className="case-intro"><p className="project-category">{p.subtitle}</p><h3>{p.title}</h3><p>{p.context}</p><div className="schedule-art" aria-label="Schéma illustratif d’ordonnancement, sans données réelles"><div className="schedule-heading">SCHÉMA ILLUSTRATIF / ORDONNANCEMENT</div>{[0,1,2].map((row)=><div className="schedule-row" key={row}><span>M{row+1}</span><div>{[0,1,2,3].map(n=><i key={n} style={{width:`${[24,14,27,18][(n+row)%4]}%`,background:['#858aff','#6967b9','#4e648f','#a098d1'][(n+row)%4]}}/>)}</div></div>)}</div><Tags items={p.tags}/>{p.github?<a className="text-action" href={p.github} target="_blank" rel="noreferrer">Voir le code ↗</a>:<p className="code-unavailable">Code à ajouter</p>}</div><dl className="case-details">{p.details.map(([title,description],i)=><div key={title}><dt><span>0{i+1}</span>{title}</dt><dd>{description}</dd></div>)}</dl></article>)}</div></section>
- <section className="wrap section education" id="formation"><div><p className="eyebrow">05 — FORMATION</p><h2>Des fondations solides.<br/><span>Un parcours qui évolue.</span></h2></div><div className="timeline">{formations.map(f=><article key={f.title}><span className="timeline-dot"/><p className="timeline-date">{f.date}</p><h3>{f.title}</h3><p className="school">{f.school}</p>{f.note&&<span className="education-tag">{f.note}</span>}</article>)}</div></section>
- <section className="wrap languages-section" id="langues"><p className="eyebrow">06 — LANGUES</p><div className="languages-grid">{languages.map(([language,level])=><div key={language}><h3>{language}</h3><p>{level}</p></div>)}</div></section>
- <section className="contact-section" id="contact"><div className="wrap section contact-grid"><div><p className="eyebrow">07 — CONTACT</p><h2>Construisons<br/><span>la prochaine étape.</span></h2><p>{profile.availability}</p><div className="socials"><a href={`mailto:${profile.email}`}><Mail size={19}/><span>E-mail<small>{profile.email}</small></span><ArrowUpRight size={18}/></a><a href={profile.linkedin} target="_blank" rel="noreferrer"><Linkedin size={19}/><span>LinkedIn<small>{profile.name}</small></span><ArrowUpRight size={18}/></a></div></div><form onSubmit={contact}><div className="form-top"><span>PRÉPARER UN MESSAGE</span><span>↗</span></div><div className="form-row"><label>Votre nom<input name="name" autoComplete="name" placeholder="Votre nom" required maxLength={150}/></label><label>Votre e-mail<input name="email" type="email" autoComplete="email" placeholder="vous@exemple.fr" required maxLength={254}/></label></div><label>Sujet<input name="subject" placeholder="Une opportunité, une question…" required maxLength={200}/></label><label>Votre message<textarea name="message" rows="4" placeholder="Parlez-moi de votre projet…" required maxLength={4000}/></label><button className="button primary" type="submit">Ouvrir ma messagerie <Send size={16}/></button><p className="form-note">Ce formulaire ouvre votre application de messagerie avec un brouillon prérempli. Vous devrez envoyer le message depuis cette application. Aucun message n’est envoyé ni enregistré par le site. Vous pouvez aussi utiliser le lien e-mail.</p></form></div></section></main><footer className="wrap"><a className="logo" href="#accueil">{profile.initials}<span>•</span></a><span>© {new Date().getFullYear()} {profile.name} · Modélisation, optimisation & data.</span><a href="#accueil">Retour en haut ↑</a></footer></>;
+
+function DataArt() {
+  const [phase, setPhase] = useState(0);
+
+  return (
+    <div className="hero-art">
+      <div className="art-heading">
+        <span>
+          <span className="live-dot" />
+          MODÉLISER · EXPLORER · OPTIMISER
+        </span>
+        <span>FIG. 001</span>
+      </div>
+
+      <div className="point-cloud">
+        <svg
+          viewBox="0 0 500 410"
+          role="img"
+          aria-label="Nuage de points abstrait illustratif, sans données de performance"
+        >
+          <defs>
+            <radialGradient id="glow">
+              <stop stopColor="#6c56ff" stopOpacity=".15" />
+              <stop offset="1" stopColor="#6c56ff" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          <ellipse
+            cx="250"
+            cy="210"
+            rx="240"
+            ry="190"
+            fill="url(#glow)"
+          />
+
+          {[0, 1, 2, 3, 4].map((n) => (
+            <path
+              key={n}
+              d={`M45 ${310 - n * 33} L240 ${390 - n * 33} L455 ${270 - n * 33}`}
+              className="gridline"
+            />
+          ))}
+
+          {Array.from({ length: 330 }, (_, i) => {
+            const t = i * 2.39996;
+            const r = Math.sqrt(i / 330);
+            const x = 250 + Math.cos(t) * r * 180;
+            const y =
+              208 +
+              Math.sin(t) * r * 108 +
+              Math.sin(x / 50 + phase) * 40;
+
+            return (
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r={i % 13 === 0 ? 3 : 1.7}
+                fill={i % 3 === 0 ? '#a589ff' : '#5188ff'}
+                opacity={0.35 + (i % 7) / 12}
+                style={{
+                  animationDelay: `${(i % 20) * -0.2}s`,
+                }}
+              />
+            );
+          })}
+        </svg>
+
+        <span className="floating-tag">
+          〈 contraintes → possibilités 〉
+        </span>
+      </div>
+
+      <div className="art-footer">
+        <span>VISUALISATION ILLUSTRATIVE · {phase + 1}/3</span>
+        <button
+          onClick={() => setPhase((phase + 1) % 3)}
+          aria-label="Changer la visualisation"
+        >
+          ↻
+        </button>
+      </div>
+    </div>
+  );
 }
-createRoot(document.getElementById('root')).render(<App/>);
+
+function App() {
+  const [menu, setMenu] = useState(false);
+
+  // Prépare un brouillon : le visiteur l’envoie depuis sa messagerie.
+  function contact(event) {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const subject = encodeURIComponent(data.get('subject'));
+    const body = encodeURIComponent(
+      `${data.get('name')} (${data.get('email')})\n\n${data.get('message')}`
+    );
+
+    window.location.href =
+      `mailto:${profile.email}?subject=${subject}&body=${body}`;
+  }
+
+  return (
+    <>
+      <a className="skip" href="#main">
+        Aller au contenu
+      </a>
+
+      <header>
+        <a
+          className="logo"
+          href="#accueil"
+          aria-label={`Accueil de ${profile.name}`}
+        >
+          <span className="logo-mark">
+            {profile.initials}
+            <span>•</span>
+          </span>
+          <span className="logo-label">MODÉLISATION & DATA</span>
+        </a>
+
+        <nav
+          className={menu ? 'open' : ''}
+          aria-label="Navigation principale"
+        >
+          {navigation.map(([label, id]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={() => setMenu(false)}
+            >
+              {label}
+            </a>
+          ))}
+
+          <a
+            className="nav-contact"
+            href="#contact"
+            onClick={() => setMenu(false)}
+          >
+            Contact <ArrowUpRight size={15} />
+          </a>
+        </nav>
+
+        <button
+          className="menu-button"
+          onClick={() => setMenu(!menu)}
+          aria-expanded={menu}
+          aria-label={menu ? 'Fermer le menu' : 'Ouvrir le menu'}
+        >
+          {menu ? <X /> : <Menu />}
+        </button>
+      </header>
+
+      <main id="main">
+        <section className="hero wrap personal-hero" id="accueil">
+          <div className="hero-copy">
+            <div className="eyebrow">
+              <span /> PORTFOLIO PERSONNEL
+            </div>
+
+            <p className="hello">Bonjour, je suis</p>
+
+            <h1>
+              {profile.name.split(' ')[0]}
+              <br />
+              <span>
+                {profile.name.split(' ').slice(1).join(' ')}.
+              </span>
+            </h1>
+
+            <p className="professional-title">{profile.title}</p>
+            <p className="student-title">{profile.education}</p>
+            <p className="intro">{profile.introduction}</p>
+
+            <div className="availability">
+              <span className="live-dot" />
+              <p>{profile.availability}</p>
+            </div>
+
+            <div className="hero-actions">
+              <a className="button primary" href="#projets">
+                Découvrir mon projet <ArrowUpRight size={16} />
+              </a>
+
+              <a
+                className="button secondary"
+                href={profile.cv}
+                download="CV_Billal_REMINI.pdf"
+              >
+                Télécharger mon CV <Download size={16} />
+              </a>
+
+              <a className="text-action" href="#contact">
+                Me contacter ↗
+              </a>
+            </div>
+          </div>
+
+          <DataArt />
+
+          <div className="hero-bottom">
+            <a href="#a-propos">
+              DÉFILER POUR DÉCOUVRIR <span>↓</span>
+            </a>
+            <span>
+              Comprendre les contraintes. Explorer les solutions.
+            </span>
+          </div>
+        </section>
+
+        <div className="tech-strip">
+          <div className="wrap">
+            <span>
+              LES MATHÉMATIQUES COMME SOCLE.{' '}
+              <b>LES DONNÉES COMME TERRAIN.</b>
+            </span>
+            <span>
+              Python <i>✳</i> Optimisation <i>✳</i> Aide à la décision
+            </span>
+          </div>
+        </div>
+
+        <section className="wrap section about" id="a-propos">
+          <div>
+            <p className="eyebrow">01 — À PROPOS</p>
+            <h2>
+              Modéliser le réel.
+              <br />
+              <span>Explorer les possibles.</span>
+            </h2>
+          </div>
+
+          <div className="about-text">
+            <p className="large-text">
+              Des mathématiques appliquées
+              <br />
+              aux décisions concrètes.
+            </p>
+            <p>{profile.about}</p>
+            <p>{profile.interest}</p>
+            <p className="exploration-label">
+              Domaines que je souhaite explorer
+            </p>
+            <Tags items={profile.exploration} />
+          </div>
+        </section>
+
+        <section className="wrap section" id="competences">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">02 — COMPÉTENCES</p>
+              <h2>
+                Un socle analytique.
+                <br />
+                <span>Une ouverture vers la data.</span>
+              </h2>
+            </div>
+            <p>
+              Compétences et apprentissages,
+              <br />
+              sans niveaux arbitraires.
+            </p>
+          </div>
+
+          <div className="skill-grid personalized-skills">
+            {skills.map((skill, index) => {
+              const Icon = icons[skill.icon];
+
+              return (
+                <article
+                  className={`skill ${skill.learning ? 'learning' : ''}`}
+                  key={skill.title}
+                >
+                  <div className="skill-top">
+                    <Icon size={25} />
+                    <span>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <h3>{skill.title}</h3>
+                  {skill.learning && (
+                    <p>Apprentissages actuels à HETIC</p>
+                  )}
+                  <Tags items={skill.tags} />
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="experience-section" id="experience">
+          <div className="wrap section experience-grid">
+            <div>
+              <p className="eyebrow">
+                03 — EXPÉRIENCE PROFESSIONNELLE
+              </p>
+              <h2>
+                L’optimisation,
+                <br />
+                <span>sur le terrain.</span>
+              </h2>
+              <p className="experience-date">{experience.dates}</p>
+            </div>
+
+            <article className="experience-card">
+              <p className="project-category">
+                {experience.company}
+              </p>
+              <h3>{experience.role}</h3>
+
+              <ul>
+                {experience.missions.map((mission) => (
+                  <li key={mission}>{mission}</li>
+                ))}
+              </ul>
+
+              <p className="result-note">{experience.result}</p>
+
+              <a className="text-action" href="#projets">
+                Explorer le mémoire associé
+                <ArrowUpRight size={16} />
+              </a>
+            </article>
+          </div>
+        </section>
+
+        <section className="projects-section" id="projets">
+          <div className="wrap section">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">
+                  04 — PROJET ACADÉMIQUE
+                </p>
+                <h2>
+                  Des contraintes.
+                  <br />
+                  <span>Une recherche de solutions.</span>
+                </h2>
+              </div>
+            </div>
+
+            {projects.map((project) => (
+              <article className="case-study" key={project.title}>
+                <div className="case-intro">
+                  <p className="project-category">
+                    {project.subtitle}
+                  </p>
+                  <h3>{project.title}</h3>
+                  <p>{project.context}</p>
+
+                  <div
+                    className="schedule-art"
+                    aria-label="Schéma illustratif d’ordonnancement, sans données réelles"
+                  >
+                    <div className="schedule-heading">
+                      SCHÉMA ILLUSTRATIF / ORDONNANCEMENT
+                    </div>
+
+                    {[0, 1, 2].map((row) => (
+                      <div className="schedule-row" key={row}>
+                        <span>M{row + 1}</span>
+                        <div>
+                          {[0, 1, 2, 3].map((n) => (
+                            <i
+                              key={n}
+                              style={{
+                                width: `${
+                                  [24, 14, 27, 18][(n + row) % 4]
+                                }%`,
+                                background: [
+                                  '#858aff',
+                                  '#6967b9',
+                                  '#4e648f',
+                                  '#a098d1',
+                                ][(n + row) % 4],
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Tags items={project.tags} />
+
+                  {project.github ? (
+                    <a
+                      className="text-action"
+                      href={project.github}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Voir le code ↗
+                    </a>
+                  ) : (
+                    <p className="code-unavailable">
+                      Code à ajouter
+                    </p>
+                  )}
+                </div>
+
+                <dl className="case-details">
+                  {project.details.map(
+                    ([title, description], index) => (
+                      <div key={title}>
+                        <dt>
+                          <span>0{index + 1}</span>
+                          {title}
+                        </dt>
+                        <dd>{description}</dd>
+                      </div>
+                    )
+                  )}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="wrap section education" id="formation">
+          <div>
+            <p className="eyebrow">05 — FORMATION</p>
+            <h2>
+              Des fondations solides.
+              <br />
+              <span>Un parcours qui évolue.</span>
+            </h2>
+          </div>
+
+          <div className="timeline">
+            {formations.map((formation) => (
+              <article key={formation.title}>
+                <span className="timeline-dot" />
+                <p className="timeline-date">{formation.date}</p>
+                <h3>{formation.title}</h3>
+                <p className="school">{formation.school}</p>
+                {formation.note && (
+                  <span className="education-tag">
+                    {formation.note}
+                  </span>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="wrap languages-section" id="langues">
+          <p className="eyebrow">06 — LANGUES</p>
+          <div className="languages-grid">
+            {languages.map(([language, level]) => (
+              <div key={language}>
+                <h3>{language}</h3>
+                <p>{level}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="contact-section" id="contact">
+          <div className="wrap section contact-grid">
+            <div>
+              <p className="eyebrow">07 — CONTACT</p>
+
+              <h2>
+                Construisons
+                <br />
+                <span>la prochaine étape.</span>
+              </h2>
+
+              <p>{profile.availability}</p>
+
+              <div className="socials">
+                <a href={`mailto:${profile.email}`}>
+                  <Mail size={19} />
+                  <span>
+                    E-mail
+                    <small>{profile.email}</small>
+                  </span>
+                  <ArrowUpRight size={18} />
+                </a>
+
+                {/* Numéro cliquable pour ouvrir l’application téléphone. */}
+                <a href={phoneLink}>
+                  <Phone size={19} />
+                  <span>
+                    Téléphone
+                    <small>{phone}</small>
+                  </span>
+                  <ArrowUpRight size={18} />
+                </a>
+
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Linkedin size={19} />
+                  <span>
+                    LinkedIn
+                    <small>{profile.name}</small>
+                  </span>
+                  <ArrowUpRight size={18} />
+                </a>
+              </div>
+            </div>
+
+            <form onSubmit={contact}>
+              <div className="form-top">
+                <span>PRÉPARER UN MESSAGE</span>
+                <span>↗</span>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  Votre nom
+                  <input
+                    name="name"
+                    autoComplete="name"
+                    placeholder="Votre nom"
+                    required
+                    maxLength={150}
+                  />
+                </label>
+
+                <label>
+                  Votre e-mail
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="vous@exemple.fr"
+                    required
+                    maxLength={254}
+                  />
+                </label>
+              </div>
+
+              <label>
+                Sujet
+                <input
+                  name="subject"
+                  placeholder="Une opportunité, une question…"
+                  required
+                  maxLength={200}
+                />
+              </label>
+
+              <label>
+                Votre message
+                <textarea
+                  name="message"
+                  rows="4"
+                  placeholder="Parlez-moi de votre projet…"
+                  required
+                  maxLength={4000}
+                />
+              </label>
+
+              <button className="button primary" type="submit">
+                Ouvrir ma messagerie <Send size={16} />
+              </button>
+
+              <p className="form-note">
+                Ce formulaire ouvre votre application de messagerie
+                avec un brouillon prérempli. Vous devrez envoyer le
+                message depuis cette application. Aucun message
+                n’est envoyé ni enregistré par le site. Vous pouvez
+                aussi utiliser le lien e-mail.
+              </p>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer className="wrap">
+        <a className="logo" href="#accueil">
+          {profile.initials}
+          <span>•</span>
+        </a>
+        <span>
+          © {new Date().getFullYear()} {profile.name} ·
+          Modélisation, optimisation & data.
+        </span>
+        <a href="#accueil">Retour en haut ↑</a>
+      </footer>
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
