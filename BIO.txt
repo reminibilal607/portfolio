@@ -1,7 +1,0 @@
-Je suis Billal REMINI, titulaire d’un master en modélisation, optimisation et aide à la décision, et actuellement étudiant en Mastère Prépa Digital à HETIC Paris.
-
-Passionné par l’optimisation, je m’intéresse à la manière dont les mathématiques et les données permettent de résoudre des problèmes concrets. Lors de mon stage chez Général Emballage, j’ai travaillé sur la planification et l’ordonnancement de la production de carton ondulé, en comparant la méthode EDD à un algorithme génétique.
-
-Aujourd’hui, je développe mes compétences en Data Science et intelligence artificielle pour compléter ma formation en mathématiques appliquées et en programmation.
-
-Je recherche un stage de 4 à 6 mois à partir du 10 mai 2027, en Data Science, IA ou optimisation, pour contribuer à des projets concrets et approfondir mes compétences.
